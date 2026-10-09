@@ -60,16 +60,16 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
             
             <!-- 3D Interactive Floor Plan Section -->
-            <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col items-center">
-                <h2 class="text-lg font-semibold mb-4 text-slate-800 w-full flex justify-between items-center">
+            <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col">
+                <h2 class="text-lg font-semibold mb-4 text-slate-800 flex justify-between items-center">
                     <span>3D Floor Plan (Equal Circular Hotspots)</span>
                     <span class="text-xs font-normal text-slate-400">Hover & Click zones</span>
                 </h2>
                 
-                <!-- Container sized to fit the image width perfectly using w-fit & mx-auto -->
-                <div id="image-container" class="relative w-fit mx-auto max-h-[520px] rounded-xl overflow-hidden border border-slate-200 bg-slate-900 flex justify-center items-center">
-                    <!-- Floor Plan Image with natural sizing -->
-                    <img src="IMG_20261007_031139_622.jpg" alt="3D Floor Plan" class="h-auto max-h-[520px] w-auto block opacity-95">
+                <!-- Added max-h constraint and object-contain containment -->
+                <div id="image-container" class="relative w-full max-h-[520px] rounded-xl overflow-hidden border border-slate-200 bg-slate-900 flex justify-center items-center">
+                    <!-- Floor Plan Image -->
+                    <img src="IMG_20261007_031139_622.jpg" alt="3D Floor Plan" class="max-h-[520px] w-auto object-contain block opacity-95">
                     
                     <!-- Floating Tooltip -->
                     <div id="tooltip" class="svg-tooltip"></div>
