@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apartment Floor Area Interactive Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        .apartment-overlay {
+            transition: all 0.2s ease-in-out;
+            fill: rgba(59, 130, 246, 0.15);
+            stroke: #3b82f6;
+            stroke-width: 3;
+            cursor: pointer;
+        }
+        .apartment-overlay:hover {
+            fill: rgba(59, 130, 246, 0.35);
+            stroke-width: 5;
+            stroke: #2563eb;
+        }
+        .apartment-overlay.selected {
+            fill: rgba(239, 68, 68, 0.45);
+            stroke: #dc2626;
+            stroke-width: 6;
+        }
+        .table-row-selected {
+            background-color: #fee2e2 !important;
+            font-weight: 600;
+        }
+        .svg-tooltip {
+            position: absolute;
+            background: rgba(15, 23, 42, 0.9);
+            color: #fff;
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 6px;
+            pointer-events: none;
+            display: none;
+            z-index: 50;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen p-6">
+    <div class="max-w-7xl mx-auto space-y-6">
+        
+        <!-- Header -->
+        <header class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+                <h1 class="text-2xl font-bold text-slate-900">B+G+11 Apartment Unit Dashboard</h1>
+                <p class="text-sm text-slate-500">Interactive Equal-Sized Circular Hotspots 3D Floor Plan</p>
+            </div>
+            <div id="selection-badge" class="bg-blue-50 text-blue-700 px-4 py-2 rounded-xl text-sm font-medium border border-blue-200">
+                👉 Click any circular apartment hotspot on the 3D plan or table below to inspect.
+            </div>
+        </header>
+
+        <!-- Main Grid: Image Viewer & Detail Card -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- 3D Interactive Floor Plan Section -->
+            <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col">
+                <h2 class="text-lg font-semibold mb-4 text-slate-800 flex justify-between items-center">
+                    <span>3D Floor Plan (Equal Circular Hotspots)</span>
+                    <span class="text-xs font-normal text-slate-400">Hover & Click zones</span>
+                </h2>
+                
+                <div id="image-container" class="relative w-full rounded-xl overflow-hidden border border-slate-200 bg-slate-900 flex justify-center items-center">
+                    <!-- Floor Plan Image -->
+                    <img src="IMG_20261007_031139_622.jpg" alt="3D Floor Plan" class="w-full h-auto object-contain block opacity-95">
+                    
+                    <!-- Floating Tooltip -->
+                    <div id="tooltip" class="svg-tooltip"></div>
+
+                    <!-- SVG Overlay with Equal-Sized Non-Overlapping Circular Hotspots[cite: 7] -->
+                    <svg viewBox="0 0 1000 1000" class="absolute inset-0 w-full h-full pointer-events-auto">
+                        <!-- Apartment 1 (Right Wing / Curved Balcony) -->
+                        <circle cx="765" cy="520" r="42" class="apartment-overlay" 
+                            onclick="selectApartment(1)" 
+                            onmousemove="showTooltip(event, 'Apartment 1 (133 m²)')" 
+                            onmouseout="hideTooltip()" 
+                            data-id="1" />
+                        
+                        <!-- Apartment 2 (Upper Right Inner Core) -->
+                        <circle cx="850" cy="710" r="42" class="apartment-overlay" 
+                            onclick="selectApartment(2)" 
+                            onmousemove="showTooltip(event, 'Apartment 2 (126 m²)')" 
+                            onmouseout="hideTooltip()" 
+                            data-id="2" />
+
+                        <!-- Apartment 3 (Top Wing) -->
+                        <circle cx="430" cy="610" r="42" class="apartment-overlay" 
+                            onclick="selectApartment(3)" 
+                            onmousemove="showTooltip(event, 'Apartment 3 (126 m²)')" 
+                            onmouseout="hideTooltip()" 
+                            data-id="3" />
+                        
+                        <!-- Apartment 4 (Bottom Middle) -->
+                        <circle cx="320" cy="400" r="42" class="apartment-overlay" 
+                            onclick="selectApartment(4)" 
+                            onmousemove="showTooltip(event, 'Apartment 4 (120 m²)')" 
+                            onmouseout="hideTooltip()" 
+                            data-id="4" />
+                        
+                        <!-- Apartment 5 (Left Wing) -->
+                        <circle cx="500" cy="190" r="42" class="apartment-overlay" 
+                            onclick="selectApartment(5)" 
+                            onmousemove="showTooltip(event, 'Apartment 5 (114 m²)')" 
+                            onmouseout="hideTooltip()" 
+                            data-id="5" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Detailed Info Card Section -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
+                <div>
+                    <h2 class="text-lg font-semibold mb-4 text-slate-800 flex items-center justify-between">
+                        <span>Unit Details</span>
+                        <span id="card-apt-title" class="text-xs bg-slate-100 text-slate-600 px-2.5 py-1 rounded-lg">None Selected</span>
+                    </h2>
+                    
+                    <div id="card-content" class="space-y-4 text-sm">
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 text-center text-slate-500 py-12">
+                            Click any apartment hotspot on the 3D plan or table to view dimensions.
+                        </div>
+                    </div>
+                </div>
+
+                <div id="card-totals" class="mt-6 pt-4 border-t border-slate-100 hidden">
+                    <div class="flex justify-between font-semibold text-slate-700">
+                        <span>Total Interior:</span>
+                        <span id="detail-interior">-</span>
+                    </div>
+                    <div class="flex justify-between font-semibold text-slate-700 mt-1">
+                        <span>Total Balcony:</span>
+                        <span id="detail-balcony">-</span>
+                    </div>
+                    <div class="flex justify-between font-bold text-lg text-blue-600 mt-2 pt-2 border-t border-slate-200">
+                        <span>Overall Area:</span>
+                        <span id="detail-total">-</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Table Section -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <h2 class="text-lg font-semibold mb-4 text-slate-800">Complete Apartment Area Table</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-sm">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                            <th class="p-3 font-semibold">Apartment Unit</th>
+                            <th class="p-3 font-semibold">Living & Dining</th>
+                            <th class="p-3 font-semibold">Master Bed</th>
+                            <th class="p-3 font-semibold">Bed A</th>
+                            <th class="p-3 font-semibold">Bed B</th>
+                            <th class="p-3 font-semibold">Kitchen</th>
+                            <th class="p-3 font-semibold">Maid's Room</th>
+                            <th class="p-3 font-semibold">Bathrooms</th>
+                            <th class="p-3 font-semibold">Corridors</th>
+                            <th class="p-3 font-semibold">Interior</th>
+                            <th class="p-3 font-semibold">Balconies</th>
+                            <th class="p-3 font-semibold text-blue-600">Total Area</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body" class="divide-y divide-slate-100">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JavaScript Controller -->
+    <script>
+        const apartmentData = [
+            { id: 1, name: "Apartment 1", living: 36, masterBed: 18, bedA: 11, bedB: 13, kitchen: 13, maid: 4, baths: 9, corridor: 15, interior: 119, balconies: 14, total: 133 },
+            { id: 2, name: "Apartment 2", living: 40, masterBed: 18, bedA: 13, bedB: 10, kitchen: 11, maid: 5, baths: 10, corridor: 8, interior: 115, balconies: 11, total: 126 },
+            { id: 3, name: "Apartment 3", living: 36, masterBed: 19, bedA: 14, bedB: 12, kitchen: 13, maid: 4, baths: 8, corridor: 5, interior: 111, balconies: 15, total: 126 },
+            { id: 4, name: "Apartment 4", living: 42, masterBed: 15, bedA: 10, bedB: 13, kitchen: 12, maid: 5, baths: 7, corridor: 10, interior: 114, balconies: 6, total: 120 },
+            { id: 5, name: "Apartment 5", living: 42, masterBed: 14, bedA: 12, bedB: 10, kitchen: 11, maid: 5, baths: 8, corridor: 6, interior: 108, balconies: 6, total: 114 }
+        ];
+
+        // Populate Table Rows
+        const tableBody = document.getElementById('table-body');
+        apartmentData.forEach(apt => {
+            const row = document.createElement('tr');
+            row.id = `row-${apt.id}`;
+            row.className = 'hover:bg-slate-50 cursor-pointer transition-colors';
+            row.onclick = () => selectApartment(apt.id);
+            row.innerHTML = `
+                <td class="p-3 font-semibold text-slate-900">${apt.name}</td>
+                <td class="p-3">${apt.living} m²</td>
+                <td class="p-3">${apt.masterBed} m²</td>
+                <td class="p-3">${apt.bedA} m²</td>
+                <td class="p-3">${apt.bedB} m²</td>
+                <td class="p-3">${apt.kitchen} m²</td>
+                <td class="p-3">${apt.maid} m²</td>
+                <td class="p-3">${apt.baths} m²</td>
+                <td class="p-3">${apt.corridor} m²</td>
+                <td class="p-3 font-medium">${apt.interior} m²</td>
+                <td class="p-3">${apt.balconies} m²</td>
+                <td class="p-3 font-bold text-blue-600">${apt.total} m²</td>
+            `;
+            tableBody.appendChild(row);
+        });
+
+        // Tooltip Functions
+        const tooltip = document.getElementById('tooltip');
+        function showTooltip(event, text) {
+            tooltip.textContent = text;
+            tooltip.style.display = 'block';
+            const rect = document.getElementById('image-container').getBoundingClientRect();
+            tooltip.style.left = (event.clientX - rect.left + 15) + 'px';
+            tooltip.style.top = (event.clientY - rect.top - 30) + 'px';
+        }
+        function hideTooltip() {
+            tooltip.style.display = 'none';
+        }
+
+        // Selection Controller
+        function selectApartment(id) {
+            // Update Overlays
+            document.querySelectorAll('.apartment-overlay').forEach(el => {
+                if(el.getAttribute('data-id') == id) {
+                    el.classList.add('selected');
+                } else {
+                    el.classList.remove('selected');
+                }
+            });
+
+            // Update Table Highlight
+            document.querySelectorAll('tbody tr').forEach(row => {
+                row.classList.remove('table-row-selected');
+            });
+            const selectedRow = document.getElementById(`row-${id}`);
+            if(selectedRow) {
+                selectedRow.classList.add('table-row-selected');
+            }
+
+            // Update Detail Card
+            const apt = apartmentData.find(a => a.id === id);
+            if (apt) {
+                document.getElementById('card-apt-title').textContent = apt.name;
+                document.getElementById('card-totals').classList.remove('hidden');
+                document.getElementById('detail-interior').textContent = apt.interior + ' m²';
+                document.getElementById('detail-balcony').textContent = apt.balconies + ' m²';
+                document.getElementById('detail-total').textContent = apt.total + ' m²';
+
+                document.getElementById('card-content').innerHTML = `
+                    <div class="grid grid-cols-2 gap-2 text-slate-600">
+                        <div class="p-2 bg-slate-50 rounded-lg"><strong>Living & Dining:</strong> ${apt.living} m²</div>
+                        <div class="p-2 bg-slate-50 rounded-lg"><strong>Master Bed:</strong> ${apt.masterBed} m²</div>
+                        <div class="p-2 bg-slate-50 rounded-lg"><strong>Bedroom A:</strong> ${apt.bedA} m²</div>
+                        <div class="p-2 bg-slate-50 rounded-lg"><strong>Bedroom B:</strong> ${apt.bedB} m²</div>
+                        <div class="p-2 bg-slate-50 rounded-lg"><strong>Kitchen:</strong> ${apt.kitchen} m²</div>
+                        <div class="p-2 bg-slate-50 rounded-lg"><strong>Maid's Room:</strong> ${apt.maid} m²</div>
+                        <div class="p-2 bg-slate-50 rounded-lg"><strong>Bathrooms:</strong> ${apt.baths} m²</div>
+                        <div class="p-2 bg-slate-50 rounded-lg"><strong>Corridors:</strong> ${apt.corridor} m²</div>
+                    </div>
+                `;
+                document.getElementById('selection-badge').textContent = `Currently Viewing: ${apt.name} (${apt.total} m² total)`;
+                document.getElementById('selection-badge').className = "bg-green-50 text-green-700 px-4 py-2 rounded-xl text-sm font-medium border border-green-200";
+            }
+        }
+    </script>
+</body>
+</html>
