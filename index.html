@@ -9,13 +9,13 @@
     <style>
         .apartment-overlay {
             transition: all 0.2s ease-in-out;
-            fill: rgba(37, 99, 235, 0.52); /* Fill opacity set to 0.52 */
-            stroke: #1d4ed8; /* Strong darker blue border */
+            fill: rgba(37, 99, 235, 0.52);
+            stroke: #1d4ed8;
             stroke-width: 4;
             cursor: pointer;
         }
         .apartment-overlay:hover {
-            fill: rgba(37, 99, 235, 0.75); /* Adjusted hover opacity accordingly */
+            fill: rgba(37, 99, 235, 0.75);
             stroke-width: 6;
             stroke: #1e40af;
         }
@@ -48,14 +48,14 @@
         <!-- Main Grid: Image Viewer & Detail Card -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
             
-            <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col">
-                <h2 class="text-lg font-semibold mb-4 text-slate-800 flex justify-between items-center">
-                    <span>3D Floor Plan (Equal Circular Hotspots)</span>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col items-center lg:col-span-2">
+                <div class="w-full flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-semibold text-slate-800">3D Floor Plan (Equal Circular Hotspots)</h2>
                     <span class="text-xs font-medium text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-200">👉 Click blue circles to view apartment info</span>
-                </h2>
+                </div>
                 
-                <!-- Added max-h constraint and object-contain containment -->
-                <div id="image-container" class="relative w-full max-h-[520px] rounded-xl overflow-hidden border border-slate-200 bg-slate-900 flex justify-center items-center">
+                <!-- Container wrapping snugly around the image width -->
+                <div id="image-container" class="relative max-h-[520px] w-fit rounded-xl overflow-hidden border border-slate-200 bg-slate-900 flex justify-center items-center">
                     <!-- Floor Plan Image -->
                     <img src="IMG_20261007_031139_622.jpg" alt="3D Floor Plan" class="max-h-[520px] w-auto object-contain block opacity-95">
                     
