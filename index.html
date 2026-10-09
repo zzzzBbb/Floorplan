@@ -44,17 +44,6 @@
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen p-6">
     <div class="max-w-7xl mx-auto space-y-6">
-        
-        <!-- Header -->
-        <header class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-                <h1 class="text-2xl font-bold text-slate-900">B+G+11 Apartment Unit Dashboard</h1>
-                <p class="text-sm text-slate-500">Interactive Equal-Sized Circular Hotspots 3D Floor Plan</p>
-            </div>
-            <div id="selection-badge" class="bg-blue-50 text-blue-700 px-4 py-2 rounded-xl text-sm font-medium border border-blue-200">
-                👉 Click any circular apartment hotspot on the 3D plan or table below to inspect.
-            </div>
-        </header>
 
         <!-- Main Grid: Image Viewer & Detail Card -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
@@ -261,8 +250,6 @@
                         <div class="p-2 bg-slate-50 rounded-lg"><strong>Corridors:</strong> ${apt.corridor} m²</div>
                     </div>
                 `;
-                document.getElementById('selection-badge').textContent = `Currently Viewing: ${apt.name} (${apt.total} m² total)`;
-                document.getElementById('selection-badge').className = "bg-green-50 text-green-700 px-4 py-2 rounded-xl text-sm font-medium border border-green-200";
             }
         }
     </script>
