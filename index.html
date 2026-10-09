@@ -57,7 +57,7 @@
         </header>
 
         <!-- Main Grid: Image Viewer & Detail Card -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
             
             <!-- 3D Interactive Floor Plan Section -->
             <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col">
@@ -66,14 +66,15 @@
                     <span class="text-xs font-normal text-slate-400">Hover & Click zones</span>
                 </h2>
                 
-                <div id="image-container" class="relative w-full rounded-xl overflow-hidden border border-slate-200 bg-slate-900 flex justify-center items-center">
+                <!-- Added max-h constraint and object-contain containment -->
+                <div id="image-container" class="relative w-full max-h-[520px] rounded-xl overflow-hidden border border-slate-200 bg-slate-900 flex justify-center items-center">
                     <!-- Floor Plan Image -->
-                    <img src="IMG_20261007_031139_622.jpg" alt="3D Floor Plan" class="w-full h-auto object-contain block opacity-95">
+                    <img src="IMG_20261007_031139_622.jpg" alt="3D Floor Plan" class="max-h-[520px] w-auto object-contain block opacity-95">
                     
                     <!-- Floating Tooltip -->
                     <div id="tooltip" class="svg-tooltip"></div>
 
-                    <!-- SVG Overlay with Equal-Sized Non-Overlapping Circular Hotspots[cite: 7] -->
+                    <!-- SVG Overlay with Equal-Sized Non-Overlapping Circular Hotspots -->
                     <svg viewBox="0 0 1000 1000" class="absolute inset-0 w-full h-full pointer-events-auto">
                         <!-- Apartment 1 (Right Wing / Curved Balcony) -->
                         <circle cx="765" cy="520" r="42" class="apartment-overlay" 
@@ -114,7 +115,7 @@
             </div>
 
             <!-- Detailed Info Card Section -->
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between max-h-[580px]">
                 <div>
                     <h2 class="text-lg font-semibold mb-4 text-slate-800 flex items-center justify-between">
                         <span>Unit Details</span>
